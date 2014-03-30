@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<body>
+
+	<ui:composition template="./../Inicial/Template.xhtml">
+		<ui:define name="content">
+		
+		  <header>
+			<p:graphicImage value="./../resources/images/pessoal.png" id="imgCadastro"></p:graphicImage>
+			<h1>#{i18n['cadastro.usuario.descricao']}</h1>
+		  </header>
+		
+		  
+			<h:form prependId="false" id="form">
+			  <nav>
+				<div id="subMenuCadastro">
+					<p:toolbar id="toolbarCadastro">
+						<p:toolbarGroup align="left">
+							
+							<p:commandButton value="#{i18n['button.consultar']}"
+								icon="imgConsultar" update="tabEntidades,toolbarCadastro,:formDialog:mensagemModal"
+								actionListener="#{usuarioBean.pesquisarEntidades()}"
+								onclick="dialogCarregando.show()"
+								oncomplete="dialogCarregando.hide()" />
+
+							<p:commandButton value="#{i18n['button.limpar']}"
+								icon="imgLimpar"
+								update="tabEntidades,toolbarCadastro,camposPesquisa"
+								actionListener="#{usuarioBean.limpar}" process="@this" />
+
+							<p:commandButton value="#{i18n['button.novoUsuario']}"
+								icon="imgAdd"
+								update="dlgCadastro,tabEntidades,toolbarCadastro,camposPesquisa"
+								onclick="dialogCarregando.show()"
+								actionListener="#{usuarioBean.inserirEntidade}" process="@this"
+								oncomplete="dialogCarregando.hide();dialogCadastro.show()" />
+
+							<p:menuButton value="#{i18n['button.exportarDados']}"
+								disabled="#{usuarioBean.exportarDados}">
+								<p:menuitem value="Pdf" icon="imgPdf" ajax="false"
+									immediate="true">
+									<p:dataExporter type="pdf" target="tabEntidades"
+										fileName="usuarios" excludeColumns="10" />
+								</p:menuitem>
+								<p:menuitem value="Excel" icon="imgExcel" ajax="false"
+									immediate="true">
+									<p:dataExporter type="xls" target="tabEntidades"
+										fileName="usuarios" excludeColumns="10" />
+								</p:menuitem>
+							</p:menuButton>
+
+						</p:toolbarGroup>
+						<p:toolbarGroup align="right">
+							<p:menuButton value="#{i18n['button.relatorio']}" id="item2"
+								disabled="#{usuarioBean.relatorio}">
+								<p:menuitem value="#{i18n['button.imprimir']}" url="#"
+									icon="imgPrinter" />
+								<p:menuitem value="Pdf" process="@none" immediate="true"
+									actionListener="#{usuarioBean.toPdf}" ajax="false"
+									icon="imgPdf" />
+								<p:menuitem value="Word" process="@none" immediate="true"
+									actionListener="#{usuarioBean.toDocx}" ajax="false"
+									icon="imgWord" />
+								<p:menuitem value="Excel" process="@none" immediate="true"
+									actionListener="#{usuarioBean.toXlsx}" ajax="false"
+									icon="imgExcel" />
+							</p:menuButton>
+						</p:toolbarGroup>
+					</p:toolbar>
+				</div>
+               </nav>
+
+
+			   <aside>
+				<h:panelGrid columns="2" id="camposPesquisa">
+					<h:outputText value="#{i18n['entidade.usuario.nome']}"
+						styleClass="textoInput" />
+					<p:inputText value="#{usuarioBean.entidadePes.nome}"
+						styleClass="textoMaior" />
+
+					<h:outputLabel value="#{i18n['entidade.usuario.idUser']}"
+						styleClass="textoInput" />
+					<p:inputText value="#{usuarioBean.entidadePes.id}" />
+				</h:panelGrid>
+			   </aside>
+
+
+               <article>
+				<p:dataTable id="tabEntidades" var="e" styleClass="tableEntidades tableEntidadesHover"
+					value="#{usuarioBean.dmEntidade}" paginator="true" rows="8"
+					emptyMessage="" >
+
+					<p:column sortBy="#{e.id}">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.idUser']}" />
+						</f:facet>
+						<h:outputText value="#{e.id}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.user']}" />
+						</f:facet>
+						<h:outputText value="#{e.username}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.nome']}" />
+						</f:facet>
+						<h:outputText value="#{e.nome}" />
+					</p:column>
+
+					<p:column styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.dtAlter']}" />
+						</f:facet>
+						<h:outputText value="#{e.dtAlter}" />
+					</p:column>
+
+					<p:column styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.status']}" />
+						</f:facet>
+						<h:outputText value="#{e.status}"    />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.email']}" />
+						</f:facet>
+						<h:outputText value="#{e.email}" />
+					</p:column>
+
+					<p:column styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.dtAlterSenha']}" />
+						</f:facet>
+						<h:outputText value="#{e.dtAlterSenha}" />
+					</p:column>
+
+					<p:column styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.flProibaltSenha']}" />
+						</f:facet>
+						<h:outputText value="#{e.flProibaltSenha}" />
+					</p:column>
+
+					<p:column styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['entidade.usuario.idioma']}" />
+						</f:facet>
+						
+						<c:choose>
+						    <c:when test="#{true}">
+						        <h:outputText value="#{e.idioma}" />
+						    </c:when>
+						</c:choose>
+						
+						
+					</p:column>
+
+					<p:column style="width: 5%;" styleClass="center">
+						<f:facet name="header">
+							<h:outputText value="#{i18n['legenda.editarRemover']}" />
+						</f:facet>
+
+						<p:commandButton title="#{i18n['button.editar.title']}"
+							id="btnEditar" styleClass="btnTable"
+							actionListener="#{usuarioBean.editarEntidade}" icon="imgEditar"
+							onclick="dialogCarregando.show()"
+							oncomplete="dialogCarregando.hide();dialogCadastro.show()"
+							process="@this,tabEntidades"
+							update=":form:dlgCadastro" />
+
+						<p:commandButton
+						    title="#{i18n['button.remover.title']}"
+							icon="imgExcluir" styleClass="btnTable"
+							actionListener="#{usuarioBean.rowToDelete}" update=":form:cfmExcluir"
+							process="@this,tabEntidades" oncomplete="confirmExcluir.show()">
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+              </article>
+			
+			  <nav>
+				<p:confirmDialog message="#{i18n['dialog.mensagem.usuario']} #{usuarioBean.entidade.nome} ?"
+					header="#{i18n['dialog.confirmacao']}" severity="alert"	widgetVar="confirmExcluir" id="cfmExcluir" >
+					<p:commandButton process="@this" value="#{i18n['button.sim']}"
+						actionListener="#{usuarioBean.removerEntidade}"
+						onclick="dialogCarregando.show()" oncomplete="dialogCarregando.hide();confirmExcluir.hide();dialogMensagem.show()"
+						 update="tabEntidades,:formDialog:mensagemJanela">
+					</p:commandButton>
+					<p:commandButton value="#{i18n['button.nao']}" onclick="confirmExcluir.hide()" />
+				</p:confirmDialog>
+               </nav>
+				
+			   <section>
+				<p:dialog id="dlgCadastro" closable="false" modal="true" resizable="false" widgetVar="dialogCadastro">
+				  <aside>
+					<div id="camposEntidade" class="janelaCad">
+					<header>
+						<div id="tituloCadastro" class="tituloCadastro">#{usuarioBean.tipo}</div>
+					</header>
+						<p:tabView id="tvEntidade" activeIndex="#{usuarioBean.tabIndex}" styleClass="tvUsuario" >  
+							<p:tab id="tbDados1" title="#{i18n['cadastro.dados']}" >  		
+								<h:inputHidden value="#{usuarioBean.insertUpdate}" id="insertUpdate"></h:inputHidden>
+									<div class="tabUsuario1">
+									<table class="camposCad1 camposCad2">
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.idUser']}" /></td>
+											<td class="input3"><p:inputText value="#{usuarioBean.entidade.id}" id="txtIdUser" disabled="true" /></td>
+											<td class="inputErro erro"></td>
+										</tr>
+										
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.user']}" /></td>
+											<td class="input3"><p:inputText value="#{usuarioBean.entidade.username}" id="txtUser" /></td>
+											<td class="inputErro erro"><span id="sUser" /></td>
+										</tr>
+									
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.nome']}" /></td>
+											<td class="input3"><p:inputText value="#{usuarioBean.entidade.nome}" id="txtNome" styleClass="textoMaior" /></td>
+											<td class="inputErro erro"><span id="sNome" /></td>
+										</tr>
+									
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.senha']}" /></td>
+											<td class="input3"><p:password value="#{usuarioBean.entidade.senha}" id="txtSenha" feedback="false" /></td>
+											<td class="inputErro erro"><span id="sSenha" /></td>
+										</tr>
+									
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.status']}" /></td>
+											<td class="input3">
+												<h:selectOneMenu value="#{usuarioBean.entidade.status}"	id="txtStatus"
+																		styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ">
+													<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.ativo']}"	itemValue="1" />
+													<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.cancelado']}"	itemValue="9" />
+												</h:selectOneMenu>
+											</td>
+											<td class="inputErro erro"><span id="sStatus" /></td>
+										</tr>
+										
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.email']}" /></td>
+											<td class="input3"><p:inputText value="#{usuarioBean.entidade.email}" id="txtEmail" styleClass="textoMaior" /></td>
+											<td class="inputErro erro"><span id="sEmail" /></td>
+										</tr>
+										
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.flProibaltSenha']}" /></td>
+											<td class="input3">
+												<h:selectOneMenu value="#{usuarioBean.entidade.flProibaltSenha}" id="txtFlProibaltSenha"
+																 styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ">
+													<f:selectItem itemLabel="#{i18n['button.sim']}" itemValue="S" />
+													<f:selectItem itemLabel="#{i18n['button.nao']}" itemValue="N" />
+												</h:selectOneMenu>
+											</td>
+											<td class="inputErro erro"><span id="sFlProibaltSenha" /></td>
+										</tr>
+										
+										<tr>
+											<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.idioma']}" /></td>
+											<td class="input3">
+												<h:selectOneMenu value="#{usuarioBean.entidade.idioma}" id="txtIdioma"
+																 styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ">
+													<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.idiomaBr']}" itemValue="1" />
+													<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.idiomaEn']}" itemValue="2" />
+												</h:selectOneMenu>
+											
+											</td>
+											<td class="inputErro erro"><span id="sIdioma" /></td>
+										</tr>
+									</table>
+								</div>
+							</p:tab>
+							
+							
+							<p:tab id="tbDados2" title="#{i18n['cadastro.grupos']}"> 
+								<div class="tabUsuario2">
+									<p:pickList id="pickList" value="#{usuarioBean.grupos}" var="grupo" 
+							                itemLabel="#{grupo.nome}"  
+							                itemValue="#{grupo.id}"  >
+							                <f:facet name="sourceCaption">#{i18n['cadastro.disponiveis']}</f:facet>  
+	        								<f:facet name="targetCaption">#{i18n['cadastro.selecionados']}</f:facet> 
+	        								 
+							                </p:pickList>
+						        </div> 
+							</p:tab>
+						</p:tabView>
+					  
+						<div class="divConfirmarLeft">
+							<p:commandButton icon="imgConfirmar" id="btnConfirmarEntidade"
+							    styleClass="btnConfirmarLeft"
+								actionListener="#{usuarioBean.confirmarEntidade}"
+								value="#{i18n['button.confirmar']}"
+								onstart="if (validarUsuario()){dialogCarregando.show();return true}else{return false}"
+								onsuccess="dialogCarregando.hide();dialogCadastro.hide();dialogMensagem.show()"
+								process="@this,dlgCadastro,tvEntidade:insertUpdate"
+								update="tabEntidades,:formDialog:mensagemJanela" />
+
+							<p:commandButton id="btnCancelar"
+								styleClass="btnCancelarLeft"
+								value="#{i18n['button.cancelar']}"
+								onclick="dialogCadastro.hide()" type="button" />
+						</div>
+					</div>
+				  </aside>
+				</p:dialog>
+               </section>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

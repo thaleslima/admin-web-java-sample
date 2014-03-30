@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+	<meta charset="UTF-8" />
+	<link href="./resources/css/login.css" rel="stylesheet" type="text/css"/>
+	<title><ui:insert name="title">Login</ui:insert></title>
+</h:head>
+
+<f:metadata>
+	<f:viewParam name="continuePage" value="#{loginBean.continuePage}" />
+</f:metadata>
+<h:body>
+
+	<header>
+		<div id="top">
+			<div id="logoAteb"></div>
+		</div>
+	</header>
+
+	<section>
+		<div id="context">
+			<div id="login">
+				<div id="lock"></div>
+				<h:form prependId="false">
+					<h1>Login</h1>
+					<span>Nome de usuário</span>
+					<br />
+					<p:inputText size="39" style="width: 280px;"
+						value="#{loginBean.usuario.username}"></p:inputText>
+					<br />
+					<span>Senha</span>
+					<br />
+					<p:password size="39" style="width: 280px;"
+						value="#{loginBean.usuario.senha}" feedback="false"></p:password>
+					<br />
+					<br />
+					<p:commandButton value="Login" action="#{loginBean.validaLogin}"
+						ajax="false" id="btnLogin" update=":mensagemFixa"></p:commandButton>
+				</h:form>
+
+				<br />
+			</div>
+			<div id="erro">
+				<p:messages showDetail="true" id="mensagemFixa" />
+			</div>
+		</div>
+	</section>
+
+	<footer>
+		<div id="rodape">Copyright 2012 - ATEB Sistemas</div>
+	</footer>
+</h:body>
+</html>

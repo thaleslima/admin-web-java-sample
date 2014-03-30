@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta charset="UTF-8" />
+	<link href="./../resources/css/layoutMenu.css" rel="stylesheet" type="text/css" />
+	<link href="./../resources/css/default.css" rel="stylesheet"  type="text/css"/>
+	<link href="./../resources/css/imagens.css" rel="stylesheet" type="text/css" />
+	<script src="./../resources/js/funcoes.js" />
+
+	<title><ui:insert name="title">Siap</ui:insert></title>
+</h:head>
+
+
+<f:view locale="#{loginBean.locale}" id="view">
+	<h:body>
+		 
+		 <aside>
+		   <h:form prependId="false" id="formDialog">	
+		   
+		   		<p:dialog id="dlgAltUsuario" closable="false" modal="true" resizable="false" widgetVar="dialogAltUsuario">
+				<div class="janelaCad">
+					<div class="tituloCadastro"><h:outputLabel value="#{i18n['dialog.configuracaoUsuario']}" /></div>
+					<table class="camposCad1 camposCad2 camposCad3">
+						<tr>
+							<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.nome']}" /></td>
+							<td class="input3"><p:inputText value="#{confUsuarioBean.usuario.nome}" id="txtconftNome" styleClass="textoMaior" /></td>
+							<td class="inputErro erro"><span id="sconfNome" /></td>
+						</tr>
+						<tr>
+							<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.senha']}" /></td>
+							<td class="input3"><p:commandButton id="btnconfAlterarSenha" styleClass="botaoAzul"	value="Alterar" type="button" /></td>
+							<td class="inputErro erro"></td>
+						</tr>
+						<tr>
+							<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.email']}" /></td>
+							<td class="input3"><p:inputText value="#{confUsuarioBean.usuario.email}" id="txtconfEmail" /></td>
+							<td class="inputErro erro"><span id="sconfEmail" /></td>
+						</tr>
+						<tr>
+							<td class="textoInput"><h:outputLabel value="#{i18n['entidade.usuario.idioma']}" /></td>
+							<td class="input3">
+								<h:selectOneMenu value="#{confUsuarioBean.usuario.idioma}" id="txtconfIdioma"
+									styleClass="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all ">
+									<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.idiomaBr']}"	itemValue="1" />
+									<f:selectItem itemLabel="#{i18n['selectItem.itemLabel.idiomaEn']}"	itemValue="2" />
+								</h:selectOneMenu>
+							</td>
+							<td class="inputErro erro"></td>
+						</tr>
+					</table>
+					
+					<div class="divConfirmarLeft">
+						<p:commandButton icon="imgConfirmar" id="btnconfConfirmar" styleClass="btnConfirmarLeft" value="#{i18n['button.confirmar']}"
+										 action="#{confUsuarioBean.confirmar}" oncomplete="dialogCarregando.hide();dialogAltUsuario.hide()" update=":formDialog:mensagemModal,:formMenu:btnUser" 
+										 onstart="if (validarConfUsuario()){dialogCarregando.show();return true}else{return false}" />
+
+						<p:commandButton id="btnconfCancelar" styleClass="btnCancelarLeft" value="#{i18n['button.cancelar']}"
+										 onclick="dialogAltUsuario.hide()" type="button" />
+					</div>
+				</div>
+			</p:dialog>
+		   
+		   		
+				<p:growl id="mensagemModal" showDetail="true" />
+				<p:messages id="mensagemFixa" showDetail="true" />
+		
+				<p:dialog widgetVar="dialogMensagem" header="#{i18n['dialog.aviso']}"
+					modal="true" width="400" height="150" closable="false" id="dlgMensagem">
+					<p:messages showDetail="true" id="mensagemJanela" />
+						<center>
+							<p:commandButton value="OK" style="width: 100px;margin-top: 20px;" onclick="dialogMensagem.hide()" />
+						</center>
+				</p:dialog>
+		
+				<p:dialog widgetVar="dialogCarregando" header="#{i18n['dialog.atencao']}" modal="true" width="300"
+					height="150" resizable="false" closable="false" id="dlgCarregando">
+					<div style="text-align: center;">
+						<p:graphicImage value="./../resources/images/img_carregando.gif" alt="" height="60" width="77" />
+						<br />
+						<h:outputText value="#{i18n['legenda.aguarde']}" style="font-size: 20px; " />
+					</div>
+				</p:dialog>
+				
+			</h:form>
+		</aside>
+		
+		<nav>
+			<div id="top" class="top">
+				<ui:insert name="top">
+					<h:form id="formMenu" prependId="false" >
+						<div id="menu">
+							<p:menubar id="menuBar">
+								<p:menuitem value="#{i18n['menu.home']}" url="./../Inicial/index.xhtml" icon="imgHome" styleClass="fundoMenu2" />
+								<p:submenu label="#{i18n['menu.cadastro']}"	styleClass="fundoMenu2" icon="imgCadastro">
+									<p:menuitem value="#{i18n['menu.cadastro.usuario']}" url="./../Cadastros/usuario.xhtml" icon="imgUsuario" />
+										
+									<p:menuitem value="#{i18n['menu.cadastro.grupo']}" url="./../Cadastros/grupo.xhtml" icon="imgGrupo16" />
+								</p:submenu>
+							</p:menubar>
+	
+							<div id="menuUser">
+								<p:commandButton value="#{loginBean.usuario.nome}" id="btnUser"	 styleClass="itemMenu"
+									action="#{confUsuarioBean.carregarUsuario}" update=":formDialog:dlgAltUsuario" 
+									oncomplete="dialogCarregando.hide();dialogAltUsuario.show()" onclick="dialogCarregando.show()"
+									/>
+								<p:commandButton action="#{loginBean.sair}" value="#{i18n['menu.sair']}" id="btnSair" icon="imgExit16"
+									styleClass="itemMenu" ajax="false"/>
+							</div>
+						</div>
+					</h:form>
+				</ui:insert>
+			</div>
+		</nav>
+		
+		<section>
+			<div id="content">
+				<div id="content2">
+					<ui:insert name="content"></ui:insert>
+				</div>
+			</div>
+		</section>
+		
+		<footer>
+			<div id="rodape">
+				<ui:insert name="rodape">Copyright 2012</ui:insert>
+			</div>
+		</footer>
+		
+	</h:body>
+</f:view>
+
+</html>

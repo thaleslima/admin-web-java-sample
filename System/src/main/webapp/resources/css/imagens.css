@@ -1,0 +1,81 @@
+.imgWait {
+	background-image: url(../images/wait.png) !important;
+	margin-right: 5px;
+}
+
+.imgHome {
+	background-image: url(../images/home2.png) !important;
+	margin-right: 5px;
+}
+
+.imgCadastro {
+	background-image: url(../images/conf.png) !important;
+	margin-right: 5px;
+}
+
+.imgUsuario {
+	background-image: url(../images/person.png) !important;
+	margin-right: 5px;
+}
+
+.imgGrupo16 {
+	background-image: url(../images/grupo16.png) !important;
+	margin-right: 5px;
+}
+
+.imgExit16 {
+	background-image: url(../images/exit16.png) !important;
+	margin-right: 5px;
+}
+
+
+.imgConsultar {
+	background-image: url(../images/pesquisar.png) !important;
+	margin-right: 5px;
+}
+
+.imgLimpar {
+	background-image: url(../images/novo.png) !important;
+	margin-right: 5px;
+}
+
+.imgAdd {
+	background-image: url(../images/add.png) !important;
+	margin-right: 5px;
+}
+
+.imgPdf {
+	background-image: url(../images/pdf32.png) !important;
+	margin-right: 5px;
+}
+
+.imgExcel {
+	background-image: url(../images/excel2.png) !important;
+	margin-right: 5px;
+}
+
+.imgPrinter {
+	background-image: url(../images/printer.png) !important;
+	margin-right: 5px;
+}
+
+.imgWord {
+	background-image: url(../images/Word.png) !important;
+	margin-right: 5px;
+}
+
+.imgEditar {
+	background-image: url(../images/editar2.png) !important;
+	margin-right: 5px;
+}
+
+.imgExcluir {
+	background-image: url(../images/excluir.png) !important;
+	margin-right: 5px;
+}
+
+.imgConfirmar{
+	background-image: url(../images/confirmar.png) !important;
+	margin-right: 5px;
+}
+
